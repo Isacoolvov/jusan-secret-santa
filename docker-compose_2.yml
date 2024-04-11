@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  spring_app:
+    container_name: spring_app_santa
+    image: isacoolvov/secret-santa-app:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    container_name: postgres_db_santa
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgressanta
+      POSTGRES_PASSWORD: postgressanta
+      POSTGRES_DB: secretsanta
+    volumes:
+      - /app/pgdata:/var/lib/postgresql/data
+      - /app/pg_backup:/backup
+      # - /app/pg_restore/secretsanta_backup.sql:/docker-entrypoint-initdb.d/secretsanta_backup.sql
+
+  # nextjs-app:
+  #   container_name: nextjs_app_santa
+  #   image: isacoolvov/secret-santa-front:dev_test
+  #   # ports:
+  #   #   - "3000:3000"
+  #   depends_on:
+  #   - postgres_db
+  #   - spring_app  
+  
+  # nginx:
+  #   container_name: nginx_santa
+  #   image: nginx:latest
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  #     - ./nginx/sites-available:/etc/nginx/sites-available
+  #   depends_on:
+  #     - spring_app
+  #     - postgres_db
+  #     - nextjs-app
+
+
+volumes:
+  sites-available:
+  pgdata:
+  pg_backup:
